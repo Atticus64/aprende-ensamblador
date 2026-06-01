@@ -1,3 +1,5 @@
+default rel
+
 extern printf
 
 section .data
@@ -7,15 +9,18 @@ section .text
 global hello_asm
 
 hello_asm:
-    sub rsp, 40
-
 %ifdef WIN64
-    lea rcx, [rel msg]
-%else
-    lea rdi, [rel msg]
-    xor eax, eax
-%endif
-
+    sub rsp, 40
+    lea rcx, [msg]
     call printf
     add rsp, 40
+%else
+    sub rsp, 8
+    lea rdi, [msg]
+    xor eax, eax
+    call printf wrt ..plt
+    add rsp, 8
+%endif
     ret
+
+section .note.GNU-stack noexec

@@ -25,3 +25,5 @@ fibo_asm:
 
 .done:
     ret
+
+section .note.GNU-stack noexec

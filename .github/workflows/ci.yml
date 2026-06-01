@@ -17,11 +17,11 @@ jobs:
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y nasm cmake build-essential
 
-      - name: Configure (debug)
+      - name: Configure
         run: cmake -B build -DRELEASE=OFF
 
       - name: Build
-        run: make -C build
+        run: cmake --build build
 
       - name: Run
         run: ./build/c-asm-learn
