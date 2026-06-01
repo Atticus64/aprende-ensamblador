@@ -9,3 +9,5 @@ c-asm-learn.exe
 web/node_modules/
 web/dist/
 web/src/content/lecciones/
+.vercel
+dist/
