@@ -27,7 +27,9 @@ const { Content } = await entry.render();
         {entry.data.pubDate.toISOString().split('T')[0]}
       </time>
     </header>
-    <Content />
+    <div class="article-body">
+      <Content />
+    </div>
   </article>
 </BaseLayout>
 
@@ -43,5 +45,8 @@ const { Content } = await entry.render();
   .article-header time {
     color: var(--text-secondary);
     font-size: 0.9rem;
+  }
+  .article-body h1:first-child {
+    display: none;
   }
 </style>
