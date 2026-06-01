@@ -4,3 +4,8 @@ c-asm-learn
 c-asm-learn.exe
 *.o
 *.obj
+
+# web (Astro)
+web/node_modules/
+web/dist/
+web/src/content/lecciones/
