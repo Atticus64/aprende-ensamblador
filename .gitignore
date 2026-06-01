@@ -1,0 +1,6 @@
+build/
+obj/
+c-asm-learn
+c-asm-learn.exe
+*.o
+*.obj

@@ -1,0 +1,27 @@
+name: Build
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y nasm cmake build-essential
+
+      - name: Configure (debug)
+        run: cmake -B build -DRELEASE=OFF
+
+      - name: Build
+        run: make -C build
+
+      - name: Run
+        run: ./build/c-asm-learn
