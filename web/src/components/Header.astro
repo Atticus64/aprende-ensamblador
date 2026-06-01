@@ -8,14 +8,32 @@ import ThemeToggle from './ThemeToggle.astro';
       <span class="logo-icon">{ }</span>
       <span class="logo-text">Aprende Ensamblador</span>
     </a>
-    <nav class="nav">
+
+    <nav class="nav" data-nav>
       <a href="/">Inicio</a>
       <a href="/lecciones">Lecciones</a>
       <a href="/about">Acerca de</a>
     </nav>
+
     <ThemeToggle />
+
+    <button class="hamburger" data-hamburger aria-label="Abrir menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </div>
 </header>
+
+<script>
+  const btn = document.querySelector('[data-hamburger]');
+  const nav = document.querySelector('[data-nav]');
+
+  btn.addEventListener('click', () => {
+    nav.classList.toggle('open');
+    btn.classList.toggle('open');
+  });
+</script>
 
 <style>
   .header {
@@ -28,7 +46,7 @@ import ThemeToggle from './ThemeToggle.astro';
   .header-inner {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1.25rem;
     height: 3.5rem;
   }
   .logo {
@@ -50,17 +68,82 @@ import ThemeToggle from './ThemeToggle.astro';
     font-size: 0.8rem;
     font-weight: 800;
   }
+
   .nav {
     display: flex;
+    align-items: center;
     gap: 1.25rem;
   }
   .nav a {
     color: var(--text-secondary);
     font-size: 0.9rem;
     font-weight: 500;
+    white-space: nowrap;
   }
   .nav a:hover {
     color: var(--accent);
     text-decoration: none;
+  }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 11;
+  }
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: all 0.25s;
+  }
+  .hamburger.open span:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+  .hamburger.open span:nth-child(2) {
+    opacity: 0;
+  }
+  .hamburger.open span:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  @media (max-width: 640px) {
+    .hamburger {
+      display: flex;
+    }
+
+    .nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 0 1.5rem;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+    .nav.open {
+      max-height: 300px;
+      padding: 0.75rem 1.5rem;
+    }
+    .nav a {
+      display: block;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 1rem;
+    }
   }
 </style>
