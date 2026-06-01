@@ -8,6 +8,6 @@ c-asm-learn.exe
 # web (Astro)
 web/node_modules/
 web/dist/
+web/.vercel/
 web/src/content/lecciones/
-.vercel/*
-dist/
+.vercel/
