@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Acerca de" description="Información sobre el proyecto Aprende Ensamblador">
+  <article class="article">
+    <h1>Acerca de este proyecto</h1>
+
+    <p>
+      <strong>Aprende Ensamblador</strong> es un proyecto plantilla para aprender
+      ensamblador moderno <strong>NASM x86-64</strong> junto con <strong>C</strong>,
+      inspirado en el repositorio <a href="https://github.com/Atticus64/leacook">leacook</a>.
+    </p>
+
+    <h2>¿Por qué NASM?</h2>
+    <p>
+      NASM (Netwide Assembler) es el ensamblador más utilizado para x86-64.
+      Su sintaxis Intel es clara, legible y es el estándar educativo y profesional
+      para sistemas Linux y Windows.
+    </p>
+
+    <h2>Características</h2>
+    <ul>
+      <li>Build system con <strong>CMake</strong> y soporte NASM nativo</li>
+      <li><strong>Multiplataforma</strong>: Windows (MSVC) y Linux (GCC)</li>
+      <li>Compilación condicional para distintas ABI (System V / Microsoft x64)</li>
+      <li>Documentación completa en <code>docs/</code> y este sitio web</li>
+      <li>CI via GitHub Actions con compilación y ejecución automatizada</li>
+    </ul>
+
+    <h2>Requisitos</h2>
+    <ul>
+      <li>CMake ≥ 3.12</li>
+      <li>NASM</li>
+      <li>Compilador C (MSVC, GCC o Clang)</li>
+      <li>Linux x86-64 o Windows x64</li>
+    </ul>
+
+    <h2>Licencia</h2>
+    <p>
+      Proyecto educativo de código abierto.
+    </p>
+  </article>
+</BaseLayout>

@@ -1,0 +1,44 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Card from '../components/Card.astro';
+import { getCollection } from 'astro:content';
+
+const lecciones = await getCollection('lecciones');
+const posts = lecciones.filter(l => !l.data.draft).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+---
+
+<BaseLayout title="Lecciones" description="Todas las lecciones de ensamblador NASM x86-64">
+  <h1 class="page-title">Lecciones</h1>
+
+  {posts.length === 0 && (
+    <p style="color: var(--text-secondary);">No hay lecciones publicadas aún.</p>
+  )}
+
+  <div class="grid">
+    {
+      posts.map((l) => (
+        <Card
+          title={l.data.title}
+          description={l.data.description || ''}
+          href={`/lecciones/${l.data.slug || l.slug}`}
+          pubDate={l.data.pubDate.toISOString().split('T')[0]}
+        />
+      ))
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .page-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+</style>

@@ -1,0 +1,181 @@
+<!DOCTYPE html><html lang="es" data-astro-cid-37fxchfa> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Guía de sintaxis NASM x86-64 — Aprende Ensamblador</title><meta name="description" content="Convenciones de llamada"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="stylesheet" href="/src/styles/global.css"><script type="module">(function(){var e="theme-preference",t=localStorage.getItem(e),r=t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",r)})();</script><style>.article-header[data-astro-cid-hrbktfoa]{margin-bottom:2rem}.article-header[data-astro-cid-hrbktfoa] h1[data-astro-cid-hrbktfoa]{font-size:2rem;font-weight:800;margin-bottom:.5rem}.article-header[data-astro-cid-hrbktfoa] time[data-astro-cid-hrbktfoa]{color:var(--text-secondary);font-size:.9rem}
+[data-astro-cid-x3pjskd3][data-theme-toggle]{background:none;border:1px solid var(--border);border-radius:8px;padding:.4rem;cursor:pointer;color:var(--text-secondary);display:flex;align-items:center;transition:all .2s}[data-astro-cid-x3pjskd3][data-theme-toggle]:hover{background:var(--accent-light);color:var(--accent)}.sun[data-astro-cid-x3pjskd3]{display:none}.moon[data-astro-cid-x3pjskd3],[data-astro-cid-x3pjskd3][data-theme=dark] .sun[data-astro-cid-x3pjskd3]{display:block}[data-astro-cid-x3pjskd3][data-theme=dark] .moon[data-astro-cid-x3pjskd3]{display:none}.header[data-astro-cid-3ef6ksr2]{border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:10}.header-inner[data-astro-cid-3ef6ksr2]{display:flex;align-items:center;gap:1.5rem;height:3.5rem}.logo[data-astro-cid-3ef6ksr2]{display:flex;align-items:center;gap:.5rem;font-weight:700;font-size:1.1rem;color:var(--text);text-decoration:none;margin-right:auto}.logo[data-astro-cid-3ef6ksr2]:hover{text-decoration:none}.logo-icon[data-astro-cid-3ef6ksr2]{background:var(--accent);color:#fff;padding:.2rem .4rem;border-radius:6px;font-size:.8rem;font-weight:800}.nav[data-astro-cid-3ef6ksr2]{display:flex;gap:1.25rem}.nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{color:var(--text-secondary);font-size:.9rem;font-weight:500}.nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]:hover{color:var(--accent);text-decoration:none}.footer[data-astro-cid-sz7xmlte]{margin-top:auto;border-top:1px solid var(--border);padding:1.5rem 0}.footer-inner[data-astro-cid-sz7xmlte]{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;font-size:.85rem;color:var(--text-secondary)}.gh-link[data-astro-cid-sz7xmlte]{display:flex;align-items:center;gap:.35rem;color:var(--text-secondary)}.gh-link[data-astro-cid-sz7xmlte]:hover{color:var(--accent)}main[data-astro-cid-37fxchfa]{flex:1;padding:2rem 0 3rem}
+</style></head> <body data-astro-cid-37fxchfa> <header class="header" data-astro-cid-3ef6ksr2> <div class="container header-inner" data-astro-cid-3ef6ksr2> <a href="/" class="logo" data-astro-cid-3ef6ksr2> <span class="logo-icon" data-astro-cid-3ef6ksr2></span> <span class="logo-text" data-astro-cid-3ef6ksr2>Aprende Ensamblador</span> </a> <nav class="nav" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2>Inicio</a> <a href="/lecciones" data-astro-cid-3ef6ksr2>Lecciones</a> <a href="/about" data-astro-cid-3ef6ksr2>Acerca de</a> </nav> <button class="theme-toggle" data-theme-toggle aria-label="Cambiar tema" data-astro-cid-x3pjskd3> <svg class="sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-x3pjskd3> <circle cx="12" cy="12" r="5" data-astro-cid-x3pjskd3></circle> <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" data-astro-cid-x3pjskd3></path> </svg> <svg class="moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-astro-cid-x3pjskd3> <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" data-astro-cid-x3pjskd3></path> </svg> </button> <script type="module">const t="theme-preference",n=document.querySelector("[data-theme-toggle]");n.addEventListener("click",()=>{const e=document.documentElement.getAttribute("data-theme")==="dark"?"light":"dark";document.documentElement.setAttribute("data-theme",e),localStorage.setItem(t,e)});</script>  </div> </header>  <main data-astro-cid-37fxchfa> <div class="container" data-astro-cid-37fxchfa>  <article class="article" data-astro-cid-hrbktfoa> <header class="article-header" data-astro-cid-hrbktfoa> <h1 data-astro-cid-hrbktfoa>Guía de sintaxis NASM x86-64</h1> <time datetime="2026-06-01" data-astro-cid-hrbktfoa> 2026-06-01 </time> </header> <h1 id="guía-de-sintaxis-nasm-x86-64">Guía de sintaxis NASM x86-64</h1>
+<h2 id="convenciones-de-llamada">Convenciones de llamada</h2>
+<h3 id="system-v-amd64-abi-linux-macos">System V AMD64 ABI (Linux, macOS)</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Argumento</th><th>Registro</th></tr></thead><tbody><tr><td>1ro</td><td><code>rdi</code></td></tr><tr><td>2do</td><td><code>rsi</code></td></tr><tr><td>3ro</td><td><code>rdx</code></td></tr><tr><td>4to</td><td><code>rcx</code></td></tr><tr><td>5to</td><td><code>r8</code></td></tr><tr><td>6to</td><td><code>r9</code></td></tr><tr><td>retorno</td><td><code>rax</code></td></tr></tbody></table>
+<p>Callee-saved: <code>rbx</code>, <code>rbp</code>, <code>r12</code>–<code>r15</code></p>
+<h3 id="microsoft-x64-abi-windows">Microsoft x64 ABI (Windows)</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Argumento</th><th>Registro</th></tr></thead><tbody><tr><td>1ro</td><td><code>rcx</code></td></tr><tr><td>2do</td><td><code>rdx</code></td></tr><tr><td>3ro</td><td><code>r8</code></td></tr><tr><td>4to</td><td><code>r9</code></td></tr><tr><td>retorno</td><td><code>rax</code></td></tr></tbody></table>
+<p>Callee-saved: <code>rbx</code>, <code>rbp</code>, <code>rdi</code>, <code>rsi</code>, <code>r12</code>–<code>r15</code></p>
+<p>El caller debe reservar <strong>shadow space</strong> (32 bytes) en la pila
+antes de llamar a una función.</p>
+<h2 id="sintaxis-nasm-intel">Sintaxis NASM (Intel)</h2>
+<h3 id="secciones">Secciones</h3>
+<pre class="astro-code astro-code-themes catppuccin-latte catppuccin-macchiato" style="background-color:#eff1f5;--shiki-dark-bg:#24273a;color:#4c4f69;--shiki-dark:#cad3f5; overflow-x: auto;" tabindex="0" data-language="nasm"><code><span class="line"><span style="color:#4C4F69;--shiki-dark:#CAD3F5">section .text    </span><span style="color:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#939AB7;--shiki-dark-font-style:italic">; código ejecutable</span></span>
+<span class="line"><span style="color:#4C4F69;--shiki-dark:#CAD3F5">section .data    </span><span style="color:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#939AB7;--shiki-dark-font-style:italic">; datos inicializados</span></span>
+<span class="line"><span style="color:#4C4F69;--shiki-dark:#CAD3F5">section .bss     </span><span style="color:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#939AB7;--shiki-dark-font-style:italic">; datos sin inicializar</span></span></code></pre>
+<h3 id="definir-datos">Definir datos</h3>
+<pre class="astro-code astro-code-themes catppuccin-latte catppuccin-macchiato" style="background-color:#eff1f5;--shiki-dark-bg:#24273a;color:#4c4f69;--shiki-dark:#cad3f5; overflow-x: auto;" tabindex="0" data-language="nasm"><code><span class="line"><span style="color:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#8AADF4;--shiki-dark-font-style:italic">msg</span><span style="color:#7C7F93;--shiki-dark:#939AB7">:</span><span style="color:#8839EF;--shiki-dark:#C6A0F6">  db</span><span style="color:#4C4F69;--shiki-dark:#CAD3F5"> "Hello", </span><span style="color:#FE640B;--shiki-dark:#F5A97F">0</span><span style="color:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#939AB7;--shiki-dark-font-style:italic">    ; bytes (string)</span></span>
+<span class="line"><span style="color:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#8AADF4;--shiki-dark-font-style:italic">num</span><span style="color:#7C7F93;--shiki-dark:#939AB7">:</span><span style="color:#8839EF;--shiki-dark:#C6A0F6">  dq</span><span style="color:#FE640B;--shiki-dark:#F5A97F"> 42</span><span style="color:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#939AB7;--shiki-dark-font-style:italic">             ; quad word (8 bytes)</span></span>
+<span class="line"><span style="color:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#8AADF4;--shiki-dark-font-style:italic">arr</span><span style="color:#7C7F93;--shiki-dark:#939AB7">:</span><span style="color:#1E66F5;--shiki-light-font-style:italic;--shiki-dark:#8AADF4;--shiki-dark-font-style:italic">  times</span><span style="color:#FE640B;--shiki-dark:#F5A97F"> 10</span><span style="color:#8839EF;--shiki-dark:#C6A0F6"> dd</span><span style="color:#FE640B;--shiki-dark:#F5A97F"> 0</span><span style="color:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#939AB7;--shiki-dark-font-style:italic">     ; array de 10 dwords</span></span></code></pre>
+<h3 id="saltos-condicionales">Saltos condicionales</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Instrucción</th><th>Salta si</th></tr></thead><tbody><tr><td><code>jz</code> / <code>je</code></td><td>zero / igual</td></tr><tr><td><code>jnz</code> / <code>jne</code></td><td>not zero / no igual</td></tr><tr><td><code>jl</code> / <code>jb</code></td><td>menor / below</td></tr><tr><td><code>jg</code> / <code>ja</code></td><td>mayor / above</td></tr><tr><td><code>jle</code></td><td>menor o igual</td></tr><tr><td><code>jge</code></td><td>mayor o igual</td></tr></tbody></table>
+<h3 id="directivas-útiles">Directivas útiles</h3>
+<pre class="astro-code astro-code-themes catppuccin-latte catppuccin-macchiato" style="background-color:#eff1f5;--shiki-dark-bg:#24273a;color:#4c4f69;--shiki-dark:#cad3f5; overflow-x: auto;" tabindex="0" data-language="nasm"><code><span class="line"><span style="color:#4C4F69;--shiki-dark:#CAD3F5">global mi_func      </span><span style="color:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#939AB7;--shiki-dark-font-style:italic">; exportar símbolo</span></span>
+<span class="line"><span style="color:#4C4F69;--shiki-dark:#CAD3F5">extern printf       </span><span style="color:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#939AB7;--shiki-dark-font-style:italic">; importar símbolo externo</span></span></code></pre>
+<h3 id="llamar-funciones-c-desde-asm">Llamar funciones C desde ASM</h3>
+<pre class="astro-code astro-code-themes catppuccin-latte catppuccin-macchiato" style="background-color:#eff1f5;--shiki-dark-bg:#24273a;color:#4c4f69;--shiki-dark:#cad3f5; overflow-x: auto;" tabindex="0" data-language="nasm"><code><span class="line"><span style="color:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#939AB7;--shiki-dark-font-style:italic">; Linux (System V)</span></span>
+<span class="line"><span style="color:#8839EF;--shiki-dark:#C6A0F6">mov</span><span style="color:#D20F39;--shiki-dark:#ED8796"> edi</span><span style="color:#4C4F69;--shiki-dark:#CAD3F5">, fmt        </span><span style="color:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#939AB7;--shiki-dark-font-style:italic">; 1er arg</span></span>
+<span class="line"><span style="color:#8839EF;--shiki-dark:#C6A0F6">mov</span><span style="color:#D20F39;--shiki-dark:#ED8796"> esi</span><span style="color:#4C4F69;--shiki-dark:#CAD3F5">, </span><span style="color:#FE640B;--shiki-dark:#F5A97F">42</span><span style="color:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#939AB7;--shiki-dark-font-style:italic">         ; 2do arg</span></span>
+<span class="line"><span style="color:#8839EF;--shiki-dark:#C6A0F6">xor</span><span style="color:#D20F39;--shiki-dark:#ED8796"> eax</span><span style="color:#4C4F69;--shiki-dark:#CAD3F5">, </span><span style="color:#D20F39;--shiki-dark:#ED8796">eax</span><span style="color:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#939AB7;--shiki-dark-font-style:italic">        ; variadic: 0 registros XMM</span></span>
+<span class="line"><span style="color:#8839EF;--shiki-dark:#C6A0F6">call</span><span style="color:#4C4F69;--shiki-dark:#CAD3F5"> printf</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#939AB7;--shiki-dark-font-style:italic">; Windows (MS x64)</span></span>
+<span class="line"><span style="color:#8839EF;--shiki-dark:#C6A0F6">sub</span><span style="color:#D20F39;--shiki-dark:#ED8796"> rsp</span><span style="color:#4C4F69;--shiki-dark:#CAD3F5">, </span><span style="color:#FE640B;--shiki-dark:#F5A97F">32</span><span style="color:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#939AB7;--shiki-dark-font-style:italic">         ; shadow space</span></span>
+<span class="line"><span style="color:#8839EF;--shiki-dark:#C6A0F6">mov</span><span style="color:#D20F39;--shiki-dark:#ED8796"> rcx</span><span style="color:#4C4F69;--shiki-dark:#CAD3F5">, fmt        </span><span style="color:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#939AB7;--shiki-dark-font-style:italic">; 1er arg</span></span>
+<span class="line"><span style="color:#8839EF;--shiki-dark:#C6A0F6">mov</span><span style="color:#D20F39;--shiki-dark:#ED8796"> edx</span><span style="color:#4C4F69;--shiki-dark:#CAD3F5">, </span><span style="color:#FE640B;--shiki-dark:#F5A97F">42</span><span style="color:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#939AB7;--shiki-dark-font-style:italic">         ; 2do arg</span></span>
+<span class="line"><span style="color:#8839EF;--shiki-dark:#C6A0F6">call</span><span style="color:#4C4F69;--shiki-dark:#CAD3F5"> printf</span></span>
+<span class="line"><span style="color:#8839EF;--shiki-dark:#C6A0F6">add</span><span style="color:#D20F39;--shiki-dark:#ED8796"> rsp</span><span style="color:#4C4F69;--shiki-dark:#CAD3F5">, </span><span style="color:#FE640B;--shiki-dark:#F5A97F">32</span></span></code></pre>
+<h3 id="syscalls-linux-x86-64">Syscalls Linux x86-64</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>syscall</th><th>Número (<code>rax</code>)</th><th>arg1</th><th>arg2</th><th>arg3</th></tr></thead><tbody><tr><td><code>read</code></td><td>0</td><td><code>rdi</code> (fd)</td><td><code>rsi</code> (buf)</td><td><code>rdx</code> (count)</td></tr><tr><td><code>write</code></td><td>1</td><td><code>rdi</code> (fd)</td><td><code>rsi</code> (buf)</td><td><code>rdx</code> (count)</td></tr><tr><td><code>exit</code></td><td>60</td><td><code>rdi</code> (code)</td><td>-</td><td>-</td></tr></tbody></table>
+<h3 id="compilación-condicional-con-nasm">Compilación condicional con NASM</h3>
+<pre class="astro-code astro-code-themes catppuccin-latte catppuccin-macchiato" style="background-color:#eff1f5;--shiki-dark-bg:#24273a;color:#4c4f69;--shiki-dark:#cad3f5; overflow-x: auto;" tabindex="0" data-language="nasm"><code><span class="line"><span style="color:#4C4F69;--shiki-dark:#CAD3F5">%</span><span style="color:#8839EF;--shiki-dark:#C6A0F6">ifdef</span><span style="color:#4C4F69;--shiki-dark:#CAD3F5"> WIN64</span></span>
+<span class="line"><span style="color:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#939AB7;--shiki-dark-font-style:italic">    ; código para Windows x64</span></span>
+<span class="line"><span style="color:#4C4F69;--shiki-dark:#CAD3F5">%</span><span style="color:#8839EF;--shiki-dark:#C6A0F6">else</span></span>
+<span class="line"><span style="color:#7C7F93;--shiki-light-font-style:italic;--shiki-dark:#939AB7;--shiki-dark-font-style:italic">    ; código para Linux x86-64</span></span>
+<span class="line"><span style="color:#4C4F69;--shiki-dark:#CAD3F5">%</span><span style="color:#8839EF;--shiki-dark:#C6A0F6">endif</span></span></code></pre>
+<p>La macro <code>WIN64</code> se define automáticamente por CMakeLists.txt
+cuando se compila en Windows.</p> </article>  </div> </main> <footer class="footer" data-astro-cid-sz7xmlte> <div class="container footer-inner" data-astro-cid-sz7xmlte> <p data-astro-cid-sz7xmlte>&copy; 2026 Aprende Ensamblador — Proyecto de aprendizaje NASM x86-64</p> <a href="https://github.com/Atticus64/leacook" target="_blank" rel="noopener" class="gh-link" data-astro-cid-sz7xmlte> <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" data-astro-cid-sz7xmlte> <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" data-astro-cid-sz7xmlte></path> </svg> <span data-astro-cid-sz7xmlte>GitHub</span> </a> </div> </footer>  </body></html> 
