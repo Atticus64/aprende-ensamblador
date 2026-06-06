@@ -4,30 +4,53 @@ import Card from '../components/Card.astro';
 import { getCollection } from 'astro:content';
 
 const lecciones = await getCollection('lecciones');
-const posts = lecciones.filter(l => !l.data.draft).sort(
+const all = lecciones.filter(l => !l.data.draft).sort(
   (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
 );
+const lessons = all.filter(l => l.data.type === 'leccion');
+const tasks = all.filter(l => l.data.type === 'tarea');
 ---
 
 <BaseLayout title="Lecciones" description="Todas las lecciones de ensamblador NASM x86-64">
-  <h1 class="page-title">Lecciones</h1>
+  <h1 class="page-title">Lecciones y tareas</h1>
 
-  {posts.length === 0 && (
-    <p style="color: var(--text-secondary);">No hay lecciones publicadas aún.</p>
+  {lessons.length > 0 && (
+    <>
+      <h2 class="section-title">Lecciones</h2>
+      <div class="grid">
+        {lessons.map((l) => (
+          <Card
+            title={l.data.title}
+            description={l.data.description || ''}
+            href={`/lecciones/${l.data.slug || l.slug}`}
+            pubDate={l.data.pubDate.toISOString().split('T')[0]}
+            type={l.data.type || 'leccion'}
+          />
+        ))}
+      </div>
+    </>
   )}
 
-  <div class="grid">
-    {
-      posts.map((l) => (
-        <Card
-          title={l.data.title}
-          description={l.data.description || ''}
-          href={`/lecciones/${l.data.slug || l.slug}`}
-          pubDate={l.data.pubDate.toISOString().split('T')[0]}
-        />
-      ))
-    }
-  </div>
+  {tasks.length > 0 && (
+    <>
+      <h2 class="section-title">Tareas</h2>
+      <div class="grid">
+        {tasks.map((l) => (
+          <Card
+            title={l.data.title}
+            description={l.data.description || ''}
+            href={`/lecciones/${l.data.slug || l.slug}`}
+            pubDate={l.data.pubDate.toISOString().split('T')[0]}
+            type={l.data.type || 'tarea'}
+          />
+        ))}
+      </div>
+    </>
+  )}
+
+  {all.length === 0 && (
+    <p style="color: var(--text-secondary);">No hay contenido publicado aún.</p>
+  )}
 </BaseLayout>
 
 <style>
@@ -35,6 +58,13 @@ const posts = lecciones.filter(l => !l.data.draft).sort(
     font-size: 2rem;
     font-weight: 800;
     margin-bottom: 1.5rem;
+  }
+  .section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+    color: var(--text-secondary);
   }
   .grid {
     display: grid;

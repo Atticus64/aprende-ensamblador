@@ -1,0 +1,35 @@
+---
+const repo = 'Atticus64/aprende-ensamblador';
+const repoId = import.meta.env.PUBLIC_GISCUS_REPO_ID || '';
+const category = 'Announcements';
+const categoryId = import.meta.env.PUBLIC_GISCUS_CATEGORY_ID || '';
+const mapping = 'pathname';
+const lang = 'es';
+---
+
+<section class="giscus-wrapper">
+  <script
+    src="https://giscus.app/client.js"
+    data-repo={repo}
+    data-repo-id={repoId}
+    data-category={category}
+    data-category-id={categoryId}
+    data-mapping={mapping}
+    data-strict="0"
+    data-reactions-enabled="1"
+    data-emit-metadata="0"
+    data-input-position="bottom"
+    data-theme="preferred_color_scheme"
+    data-lang={lang}
+    crossorigin="anonymous"
+    async
+  ></script>
+</section>
+
+<style>
+  .giscus-wrapper {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+</style>

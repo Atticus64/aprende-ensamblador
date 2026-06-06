@@ -4,8 +4,13 @@ c-asm-learn
 c-asm-learn.exe
 *.o
 *.obj
+*.exe
+*.map
+*.lst
+*.crf
 
 # web (Astro)
 web/node_modules/
 web/dist/
 web/src/content/lecciones/
+web/.env

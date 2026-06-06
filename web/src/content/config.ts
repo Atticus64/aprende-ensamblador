@@ -8,6 +8,7 @@ const lecciones = defineCollection({
     pubDate: z.date(),
     draft: z.boolean().optional(),
     slug: z.string().optional(),
+    type: z.enum(['leccion', 'tarea']).default('leccion'),
   }),
 });
 

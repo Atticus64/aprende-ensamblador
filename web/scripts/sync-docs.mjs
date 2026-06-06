@@ -11,27 +11,63 @@ if (!existsSync(outDir)) {
   mkdirSync(outDir, { recursive: true });
 }
 
-for (const file of readdirSync(docsDir).filter(f => f.endsWith('.md'))) {
-  const filePath = join(docsDir, file);
+function syncFile(filePath, type) {
   const raw = readFileSync(filePath, 'utf-8');
+  const fileName = filePath.split(/[\\/]/).pop();
 
   const titleMatch = raw.match(/^#\s+(.+)$/m);
-  const title = titleMatch ? titleMatch[1].trim() : file.replace('.md', '');
+  const title = titleMatch ? titleMatch[1].trim() : fileName.replace('.md', '');
   const descMatch = raw.match(/\n\n(.+?)(?:\n|$)/s);
   const description = descMatch ? descMatch[1].trim().replace(/^[`#]*/, '').trim() : '';
-  const slug = file.replace('.md', '');
+  const slug = fileName.replace('.md', '');
   const pubDate = statSync(filePath).mtime.toISOString().split('T')[0];
-  const isIndex = slug === 'index';
 
   const lines = [
     '---',
     `title: "${title.replace(/"/g, '\\"')}"`,
     `description: "${description.replace(/"/g, '\\"')}"`,
     `pubDate: ${pubDate}`,
-    `slug: "${isIndex ? 'inicio' : slug}"`,
+    `slug: "${slug}"`,
+    `type: "${type}"`,
   ];
-  if (isIndex) lines.push('draft: true');
   lines.push('---', '');
 
   writeFileSync(join(outDir, `${slug}.md`), lines.join('\n') + raw);
+}
+
+// Process root docs (only index.md)
+for (const file of readdirSync(docsDir).filter(f => f.endsWith('.md'))) {
+  if (file === 'index.md') {
+    const filePath = join(docsDir, file);
+    const raw = readFileSync(filePath, 'utf-8');
+    const pubDate = statSync(filePath).mtime.toISOString().split('T')[0];
+
+    const lines = [
+      '---',
+      `title: "c-asm-learn"`,
+      `description: "Proyecto plantilla para aprender ensamblador NASM x86-64 junto con C"`,
+      `pubDate: ${pubDate}`,
+      `slug: "inicio"`,
+      `type: "leccion"`,
+      'draft: true',
+      '---',
+      '',
+    ];
+    writeFileSync(join(outDir, 'index.md'), lines.join('\n') + raw);
+  }
+}
+
+// Process subdirectories
+const subDirs = {
+  lecciones: 'leccion',
+  tareas: 'tarea',
+};
+
+for (const [dir, type] of Object.entries(subDirs)) {
+  const dirPath = join(docsDir, dir);
+  if (!existsSync(dirPath)) continue;
+
+  for (const file of readdirSync(dirPath).filter(f => f.endsWith('.md'))) {
+    syncFile(join(dirPath, file), type);
+  }
 }

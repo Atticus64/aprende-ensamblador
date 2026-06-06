@@ -21,7 +21,7 @@ const featured = lecciones.filter(l => !l.data.draft).slice(0, 3);
   </section>
 
   <section class="section">
-    <h2 class="section-title">Lecciones destacadas</h2>
+    <h2 class="section-title">Destacados</h2>
     <div class="grid">
       {
         featured.map((l) => (
@@ -30,6 +30,7 @@ const featured = lecciones.filter(l => !l.data.draft).slice(0, 3);
             description={l.data.description || ''}
             href={`/lecciones/${l.data.slug || l.slug}`}
             pubDate={l.data.pubDate.toISOString().split('T')[0]}
+            type={l.data.type || 'leccion'}
           />
         ))
       }

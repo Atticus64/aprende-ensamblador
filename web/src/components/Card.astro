@@ -4,17 +4,22 @@ export interface Props {
   description: string;
   href: string;
   pubDate: string;
+  type: 'leccion' | 'tarea';
 }
 
-const { title, description, href, pubDate } = Astro.props;
+const { title, description, href, pubDate, type } = Astro.props;
+const badgeLabel = type === 'tarea' ? 'Tarea' : 'Lección';
 ---
 
 <a href={href} class="card">
   <div class="card-body">
+    <div class="card-meta">
+      <span class={`badge badge-${type}`}>{badgeLabel}</span>
+      <time class="card-date" datetime={pubDate}>{pubDate}</time>
+    </div>
     <h3 class="card-title">{title}</h3>
     <p class="card-desc">{description}</p>
   </div>
-  <time class="card-date" datetime={pubDate}>{pubDate}</time>
 </a>
 
 <style>
@@ -35,6 +40,30 @@ const { title, description, href, pubDate } = Astro.props;
     box-shadow: 0 4px 12px rgba(59,130,246,0.1);
     text-decoration: none;
   }
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    line-height: 1.4;
+  }
+  .badge-leccion {
+    background: var(--badge-leccion-bg);
+    color: var(--badge-leccion-fg);
+  }
+  .badge-tarea {
+    background: var(--badge-tarea-bg);
+    color: var(--badge-tarea-fg);
+  }
   .card-title {
     font-size: 1.1rem;
     font-weight: 600;
@@ -48,6 +77,6 @@ const { title, description, href, pubDate } = Astro.props;
   .card-date {
     color: var(--text-secondary);
     font-size: 0.8rem;
-    margin-top: 0.75rem;
+    margin-left: auto;
   }
 </style>

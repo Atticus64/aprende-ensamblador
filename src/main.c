@@ -5,7 +5,7 @@
 int main() {
     hello_asm();
 
-    int n = 10;
+    int n = 20;
     int result = fibo_asm(n);
     printf("Fibonacci(%d) = %d\n", n, result);
 

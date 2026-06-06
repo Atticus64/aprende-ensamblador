@@ -36,6 +36,10 @@
   --accent: var(--blue-600);
   --accent-hover: var(--blue-700);
   --accent-light: var(--blue-100);
+  --badge-leccion-bg: var(--blue-100);
+  --badge-leccion-fg: var(--blue-700);
+  --badge-tarea-bg: #fef3c7;
+  --badge-tarea-fg: #92400e;
 }
 
 [data-theme="dark"] {
@@ -48,6 +52,10 @@
   --accent: #8aadf4;
   --accent-hover: #b7bdf8;
   --accent-light: #363a4f;
+  --badge-leccion-bg: #363a4f;
+  --badge-leccion-fg: #8aadf4;
+  --badge-tarea-bg: #49464c;
+  --badge-tarea-fg: #eed49f;
 }
 
 html {

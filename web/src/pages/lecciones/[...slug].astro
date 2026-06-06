@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import Giscus from "../../components/Giscus.astro";
 import { getCollection } from "astro:content";
 
 export async function getStaticPaths() {
@@ -14,11 +15,14 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
+const isTarea = entry.data.type === 'tarea';
+const badgeLabel = isTarea ? 'Tarea' : 'Lección';
 ---
 
 <BaseLayout title={entry.data.title} description={entry.data.description}>
     <article class="article">
         <header class="article-header">
+            <span class={`badge badge-${entry.data.type}`}>{badgeLabel}</span>
             <time datetime={entry.data.pubDate.toISOString().split("T")[0]}>
                 {entry.data.pubDate.toISOString().split("T")[0]}
             </time>
@@ -27,20 +31,38 @@ const { Content } = await entry.render();
             <Content />
         </div>
     </article>
+
+    {isTarea && <Giscus />}
 </BaseLayout>
 
 <style>
     .article-header {
         margin-bottom: 2rem;
-    }
-    .article-header h1 {
-        font-size: 2rem;
-        font-weight: 800;
-        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
     }
     .article-header time {
         color: var(--text-secondary);
         font-size: 0.9rem;
+    }
+    .badge {
+        display: inline-block;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 0.2rem 0.6rem;
+        border-radius: 4px;
+        line-height: 1.4;
+    }
+    .badge-leccion {
+        background: var(--badge-leccion-bg);
+        color: var(--badge-leccion-fg);
+    }
+    .badge-tarea {
+        background: var(--badge-tarea-bg);
+        color: var(--badge-tarea-fg);
     }
     .article-body h1:first-child {
         display: none;

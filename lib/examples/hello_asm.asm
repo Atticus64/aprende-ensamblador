@@ -3,7 +3,7 @@ default rel
 extern printf
 
 section .data
-msg: db "Hello, World!", 10, 0
+msg: db "Sursum Versus!", 10, 0
 
 section .text
 global hello_asm
